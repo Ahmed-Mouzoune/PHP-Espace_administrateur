@@ -1,0 +1,97 @@
+/* CSS page CONNEXION */
+:root {
+    --shadowDark: #D9DDE6;
+    --background: #E4E9F2;
+    --shadowLight: #EFF5FE;
+}
+
+.bodylogin {
+    width: 100%;
+    height: 100%;
+    background: var(--background);
+}
+
+.hero-body {
+    justify-content: center;
+}
+
+.login {
+    border-radius: 25px;
+    padding: 1.5rem;
+    box-shadow: 8px 8px 15px var(--shadowDark), -8px -8px 15px var(--shadowLight);
+}
+
+.connexion {
+    background: var(--shadowDark) !important;
+}
+
+#logoLogin {
+    width: 150px;
+    height: 150px;
+}
+
+.file-icon .iconTrash {
+    font-size: 25px;
+}
+/* Background conteneur */
+.coloraside {
+    background-color: #44475a;
+}
+.colornav {
+    background-color: #44475a;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05),0 4px 7px rgba(0,0,0,0.05),0 4px 10px rgba(0,0,0,0.05);
+}
+.colormain {
+    background-color: #282a36;
+}
+/* Couleur texte */
+
+.colordeconnexion {
+    background-color: #282a36;
+    color: #eeeeee;
+}
+
+.colortextnav {
+    color: #eeeeee;
+}
+
+.colortitleaside {
+    color: #eeeeee;
+}
+
+/* Changement padding */
+.paddingnav {
+    padding: 10px 0 0;
+}
+
+/* Décoratio */
+
+a:hover{
+ background-color:#ff79c6!important;
+ text-decoration: none !important;
+}
+
+a{
+    color:white !important;
+}
+
+.menu-label{
+    color:#bd93f9 !important;
+}
+
+td{
+    background-color:#282a36 !important;
+    color:white;
+}
+
+.image.is-64x64{
+    border-radius: 30%;
+}
+
+label{
+    color:#eeeeee !important;
+}
+
+.test:hover{
+    background-color:firebrick !important;
+}

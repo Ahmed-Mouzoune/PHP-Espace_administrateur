@@ -1,0 +1,169 @@
+WYSIWYG 
+Devoir maison PHP 
+L’objectif est de créer un espace d’administration permettant de générer automatiquement des fichiers HTML à partir  d’un formulaire. 
+CONNEXION 
+• Formulaire de connexion par mail et mot de passe 
+• La liste des comptes utilisateurs sera accessible dans un fichier CSV appelé « comptes.csv » sous la forme : civilite;nom;prenom;mail;mot de passe;photo 
+(un compte par ligne) 
+Exemple : 
+2;Système;Administrateur;admin@eemi.com;password;photo-administrateur.jpg Pour la civilité, 1 signifie Madame, 2 signifie Monsieur 
+Ce fichier CSV ne devra pas être accessible en lecture à partir du navigateur Web 
+APRES CONNEXION 
+• Formulaire de création d’un nouveau compte administrateur : civilité (bouton radio), nom, prénom, mail, mot  de passe, photo (champs obligatoires, mail valide, mot de passe de plus de 6 caractères) 
+• La photo sera uploadée sur le serveur sous la forme photo-nom.jpg, nom étant le nom de l’utilisateur (sans  espaces ni accents) 
+• Pour chaque nouveau compte créé, mise à jour du fichier CSV décrit ci-avant 
+• Affichage des différents comptes administrateurs sur une page (avec leur photo) 
+• Formulaire de génération d’une page HTML : nom du fichier, titre, description, h1, main (champs obligatoires,  pas d’espaces, de caractères spéciaux ni d’accents pour le nom du fichier) 
+• Pour le main, utilisation de TinyMCE, éditeur WYSIWYG 
+• Toutes les pages accessibles après connexion ne pourront pas être affichées sans connexion (utilisation d’une  variable session). 
+BONUS 
+• Saisie d’un mot de passe fort (8 caractères, au moins un chiffre, une majuscule, une minuscule et un  caractère spécial) 
+• Possibilité de supprimer un compte si l’administrateur connecté est admin@eemi.com 
+• Utilisation du langage CSS 
+Travail à faire en binôme, à rendre avant le 07 mars minuit au format ZIP sur Classroom et à uploader sur le serveur  Web EEMI d’un des membres du groupe (chemin à respecter : php/wysiwyg/connexion.php).
+
+<?php
+
+function creer_fichier($fichier,$contenu)
+{
+	if (!$file = fopen($fichier,"w"))
+	{
+		echo("Problème d'ouverture du fichier");
+	}
+
+	if (!fwrite($file,$contenu))
+	{
+		die("Le fichier n'a pas été ouvert avec les droits d'écriture");
+	}
+
+	fclose($file) or die("Erreur fclose");
+}
+
+creer_fichier("exercice21.txt","Fonction OK");
+
+$fichier = "BDD.csv";
+
+$contenu = "2;Système;Administrateur;admin@eemi.com;password;photo-administrateur.jpg\n";
+$contenu .= "Vélon;Pierre;pierre.velon@eemi.com\n";
+$contenu .= "Berger;Léon;leon.berger@eemi.com";
+$contenu = utf8_decode($contenu);
+
+creer_fichier($fichier,$contenu);
+
+$fichier = "exercice21.html";
+
+$contenu = "<!DOCTYPE html>\n";
+$contenu .= "<html>\n";
+$contenu .= "<head>\n";
+$contenu .= "<title>Fichier créé le ".date("d/m/Y")."</title>\n";
+$contenu .= "<meta charset=\"utf-8\" />\n";
+$contenu .= "</head>\n";
+$contenu .= "<body>\n";
+$contenu .= "<h1>Titre de la page</h1>\n";
+$contenu .= "</body>\n";
+$contenu .= "</html>";
+
+creer_fichier($fichier,$contenu);
+
+?>
+$nouveauinscris =array ($_POST["civilite"],$_POST["nom"],$_POST["prenom"],$_POST["password"],$_POST["photo"]);
+
+$list = array (
+    2;Système;Administrateur;admin@eemi.com;password;photo-administrateur.jpg
+);
+
+array_push($list, $nouveauinscris);
+print_r($list);
+?>
+
+
+$fp = fopen('BDD.csv', 'w');
+foreach ($list as $line) {	
+    fputcsv($fp, split(';', $line));
+}
+fclose($fp);
+echo "CSV File Written Successfully!";
+
+function creer_fichier($fichier,$contenu)
+{
+	if (!$file = fopen($fichier,"w"))
+	{
+		echo("Problème d'ouverture du fichier");
+	}
+
+	if (!fwrite($file,$contenu))
+	{
+		die("Le fichier n'a pas été ouvert avec les droits d'écriture");
+	}
+
+	fclose($file) or die("Erreur fclose");
+
+	echo("Fichier créé");
+}
+
+$fichier = "exo21.csv"; //excel : .csv
+$contenu = "Nom;Prénom;Mail\n";
+$contenu .="Harmelle;Maxime;Maxime.harmelle@eemi.com\n";
+$contenu = utf8_decode($contenu);
+
+creer_fichier($fichier,$contenu);
+
+if ($_FILES["fichier"] != "" && isset($last_name)) {
+   $content_dir = 'upload/'; // dossier où sera déplacé le fichier image
+
+   $tmp_file = $_FILES['fichier']['tmp_name'];//*tmp_file est un fichier qui contient la photo qui sera utiliser pour déplacer l'image//
+
+   if ($_FILES['fichier']['error'] == 1) {
+      exit("Le fichier est trop lourd");
+   }
+
+   if( !is_uploaded_file($tmp_file) )
+   {
+      exit("Le fichier est introuvable");
+   }
+
+   // on vérifie maintenant l'extension
+   $type_file = $_FILES['fichier']['type'];
+   if( !strstr($type_file, 'jpg') &&  !strstr($type_file, 'jpeg') ) // verifier que la photo est .jpg
+   {
+      exit("Le fichier n'est pas un .jpg");
+   }
+
+   // on copie le fichier dans le dossier de destination
+   $image = "photo-".strtolower($last_name).".jpg";//nom du fichier//
+
+   if( !move_uploaded_file($tmp_file, $content_dir . $image) ) //move_upload_file deplace le fichier temporaire dans notre dossier upload(fichier qui heberge les images)//
+   {
+      exit("Impossible de copier le dossier dans $content_dir");
+   }
+}
+
+if ($_FILES["photo"] != "" && isset($last_name)) {
+   $content_dir = 'images/'; // dossier où sera déplacé le fichier image
+
+   $tmp_file = $_FILES['photo']['tmp_name'];//*tmp_file est un fichier qui contient la photo qui sera utiliser pour déplacer l'image//
+
+   if ($_FILES['photo']['error'] == 1) {
+      exit(Le fichier est trop lourd");
+   }
+
+   if( !is_uploaded_file($tmp_file) )
+   {
+      exit("Le fichier est introuvable");
+   }
+
+   // on vérifie maintenant l'extension
+   $type_file = $_FILES['photo']['type'];
+   if( !strstr($type_file, 'jpg') &&  !strstr($type_file, 'jpeg') ) // verifier que la photo est .jpg
+   {
+      exit("Le fichier n'est pas un .jpg");
+   }
+
+   // on copie le fichier dans le dossier de destination
+   $image = "photo-".strtolower($nom).".jpg";//nom du fichier//
+
+   if( !move_uploaded_file($tmp_file, $content_dir . $image) ) //move_upload_file deplace le fichier temporaire dans notre dossier upload(fichier qui heberge les images)//
+   {
+      exit("Impossible de copier le dossier dans $content_dir");
+   }
+}
